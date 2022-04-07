@@ -1451,6 +1451,7 @@ mlir::LogicalResult CIRGenModule::buildSwitchStmt(const SwitchStmt &S) {
 
     if (res.failed())
       return res;
+    return mlir::success();
   };
 
   // The switch scope contains the full source range for SwitchStmt.
