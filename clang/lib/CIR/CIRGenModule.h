@@ -54,6 +54,8 @@ public:
 
   ~CIRGenModule();
 
+  const std::string &getModuleNameHash() const { return ModuleNameHash; }
+
 private:
   /// The builder is a helper class to create IR inside a function. The
   /// builder is stateful, in particular it keeps an "insertion point": this
@@ -75,6 +77,9 @@ private:
   const clang::TargetInfo &target;
 
   std::unique_ptr<CIRGenCXXABI> ABI;
+
+  /// Used for `UniqueInternalLinkageNames` option
+  std::string ModuleNameHash = "";
 
   /// Per-module type mapping from clang AST to CIR.
   CIRGenTypes genTypes;
