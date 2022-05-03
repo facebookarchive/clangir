@@ -844,6 +844,24 @@ arrangeFreeFunctionLikeCall(CIRGenTypes &CGT, CIRGenModule &CGM,
       chainCall, argTypes, fnType->getExtInfo(), paramInfos, required);
 }
 
+static llvm::SmallVector<CanQualType, 16>
+getArgTypesForCall(ASTContext &ctx, const CallArgList &args) {
+  llvm::SmallVector<CanQualType, 16> argTypes;
+  for (auto &arg : args)
+    argTypes.push_back(ctx.getCanonicalParamType(arg.Ty));
+  return argTypes;
+}
+
+static llvm::SmallVector<FunctionProtoType::ExtParameterInfo, 16>
+getExtParameterInfosForCall(const FunctionProtoType *proto, unsigned prefixArgs,
+                            unsigned totalArgs) {
+  llvm::SmallVector<FunctionProtoType::ExtParameterInfo, 16> result;
+  if (proto->hasExtParameterInfos()) {
+    llvm_unreachable("NYI");
+  }
+  return result;
+}
+
 /// Arrange a call to a C++ method, passing the given arguments.
 ///
 /// numPrefixArgs is the number of the ABI-specific prefix arguments we have. It
@@ -851,6 +869,28 @@ arrangeFreeFunctionLikeCall(CIRGenTypes &CGT, CIRGenModule &CGM,
 const CIRGenFunctionInfo &CIRGenTypes::arrangeCXXMethodCall(
     const CallArgList &args, const FunctionProtoType *proto,
     RequiredArgs required, unsigned numPrefixArgs) {
-  llvm_unreachable("NYI");
+  assert(numPrefixArgs + 1 <= args.size() &&
+         "Emitting a call with less args than the required prefix?");
+  // Add one to account for `this`. It is a bit awkard here, but we don't count
+  // `this` in similar places elsewhere.
+  auto paramInfos =
+      getExtParameterInfosForCall(proto, numPrefixArgs + 1, args.size());
+
+  // FIXME: Kill copy.
+  auto argTypes = getArgTypesForCall(Context, args);
+
+  auto info = proto->getExtInfo();
+  return arrangeCIRFunctionInfo(
+      GetReturnType(proto->getReturnType()), /*instanceMethod=*/true,
+      /*chainCall=*/false, argTypes, info, paramInfos, required);
 }
 
+/// Figure out the rules for calling a function with the given formal type using
+/// the given arguments. The arguments are necessary because the function might
+/// be unprototyped, in which case it's target-dependent in crazy ways.
+const CIRGenFunctionInfo &CIRGenTypes::arrangeFreeFunctionCall(
+    const CallArgList &args, const FunctionType *fnType, bool ChainCall) {
+  assert(!ChainCall && "ChainCall NYI");
+  return arrangeFreeFunctionLikeCall(*this, CGM, args, fnType,
+                                     ChainCall ? 1 : 0, ChainCall);
+}
