@@ -57,6 +57,8 @@ public:
   const std::string &getModuleNameHash() const { return ModuleNameHash; }
 
 private:
+  mutable std::unique_ptr<TargetCIRGenInfo> TheTargetCIRGenInfo;
+
   /// The builder is a helper class to create IR inside a function. The
   /// builder is stateful, in particular it keeps an "insertion point": this
   /// is where the next operations will be introduced.
@@ -87,8 +89,6 @@ private:
   /// Per-function codegen information. Updated everytime buildCIR is called
   /// for FunctionDecls's.
   CIRGenFunction *CurCGF = nullptr;
-
-  mutable std::unique_ptr<TargetCIRGenInfo> TheTargetCIRGenInfo;
 
   // A set of references that have only been set via a weakref so far. This is
   // used to remove the weak of the reference if we ever see a direct reference
