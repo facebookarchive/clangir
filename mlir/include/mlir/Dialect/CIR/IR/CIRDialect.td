@@ -26,6 +26,7 @@ def CIR_Dialect : Dialect {
 
   let extraClassDeclaration = [{
     void registerTypes();
+    void registerAttributes();
   }];
 }
 
