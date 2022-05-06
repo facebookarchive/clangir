@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "mlir/Dialect/CIR/IR/CIRDialect.h"
+#include "mlir/Dialect/CIR/IR/CIRAttrs.h"
 #include "mlir/Dialect/CIR/IR/CIRTypes.h"
 #include "mlir/Dialect/LLVMIR/LLVMTypes.h"
 #include "mlir/IR/Builders.h"
@@ -75,6 +76,11 @@ static LogicalResult checkConstantTypes(mlir::Operation *op, mlir::Type opType,
              << opType << ") does not match value type (" << attrType.getType()
              << ")";
     }
+    return success();
+  }
+
+  if (attrType.isa<mlir::cir::CstArrayAttr>()) {
+    // CstArrayAttr is already verified to bing with cir.array type.
     return success();
   }
 
