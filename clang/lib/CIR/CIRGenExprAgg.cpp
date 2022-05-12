@@ -205,6 +205,16 @@ static void CheckAggExprForMemSetUse(AggValueSlot &Slot, const Expr *E,
   if (Slot.isZeroed() || Slot.isVolatile() || !Slot.getAddress().isValid())
     return;
 
+  // C++ objects with a user-declared constructor don't need zero'ing.
+  if (CGF.getLangOpts().CPlusPlus)
+    if (const auto *RT = CGF.getContext()
+                             .getBaseElementType(E->getType())
+                             ->getAs<RecordType>()) {
+      const auto *RD = cast<CXXRecordDecl>(RT->getDecl());
+      if (RD->hasUserDeclaredConstructor())
+        return;
+    }
+
   llvm_unreachable("NYI");
 }
 
