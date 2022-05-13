@@ -106,6 +106,10 @@ public:
   mlir::Attribute tryEmitPrivate(const APValue &value, QualType T);
   mlir::Attribute tryEmitPrivateForMemory(const APValue &value, QualType T);
 
+  mlir::Attribute tryEmitAbstract(const APValue &value, QualType destType);
+  mlir::Attribute tryEmitAbstractForMemory(const APValue &value,
+                                           QualType destType);
+
 private:
   void initializeNonAbstract(LangAS destAS) {
     assert(!InitializedNonAbstract);
@@ -127,6 +131,7 @@ private:
     Abstract = true;
     return saved;
   }
+  mlir::Attribute validateAndPopAbstract(mlir::Attribute C, AbstractState save);
 };
 
 } // namespace cir
