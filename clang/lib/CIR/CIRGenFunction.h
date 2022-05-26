@@ -398,7 +398,7 @@ public:
   // TODO: This is currently just a dumb stub. But we want to be able to clearly
   // assert where we arne't doing things that we know we should and will crash
   // as soon as we add a DebugInfo type to this class.
-  nullptr_t *getDebugInfo() { return nullptr; }
+  std::nullptr_t *getDebugInfo() { return nullptr; }
 
   /// Set the address of a local variable.
   void setAddrOfLocalVar(const clang::VarDecl *VD, Address Addr) {

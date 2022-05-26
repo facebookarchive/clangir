@@ -324,7 +324,7 @@ public:
   /// uninstrumented top level declaration.
   void AddDeferredUnusedCoverageMapping(clang::Decl *D);
 
-  nullptr_t getModuleDebugInfo() { return nullptr; }
+  std::nullptr_t getModuleDebugInfo() { return nullptr; }
 
   /// Emit any needed decls for which code generation was deferred.
   void buildDeferred();
