@@ -34,7 +34,7 @@ add_clang_library(clangCIR
   MLIRParser
   MLIRPass
   MLIRSideEffectInterfaces
-  MLIRSCFToStandard
+  MLIRSCFToControlFlow
   MLIRStandardToLLVM
   MLIRSupport
   MLIRTargetLLVMIRExport
