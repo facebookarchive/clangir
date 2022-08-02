@@ -468,7 +468,7 @@ void IfOp::build(OpBuilder &builder, OperationState &result, Value cond,
 }
 
 static LogicalResult verify(IfOp op) {
-  return RegionBranchOpInterface::verifyTypes(op);
+  return success();
 }
 
 //===----------------------------------------------------------------------===//
@@ -535,7 +535,7 @@ void ScopeOp::build(OpBuilder &builder, OperationState &result,
 }
 
 static LogicalResult verify(ScopeOp op) {
-  return RegionBranchOpInterface::verifyTypes(op);
+  return success();
 }
 
 //===----------------------------------------------------------------------===//
@@ -867,7 +867,7 @@ static LogicalResult verify(SwitchOp op) {
     return success();
   // FIXME: add a verifier that ensures there's only one block per case
   // region where "cir.yield fallthrough" is used.
-  return RegionBranchOpInterface::verifyTypes(op);
+  return success();
 }
 
 void SwitchOp::build(
@@ -993,7 +993,7 @@ static LogicalResult verify(LoopOp op) {
       terminateError();
   }
 
-  return RegionBranchOpInterface::verifyTypes(op);
+  return success();
 }
 
 //===----------------------------------------------------------------------===//
