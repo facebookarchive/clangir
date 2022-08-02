@@ -19,7 +19,7 @@
 #include "clang/AST/GlobalDecl.h"
 
 #include "mlir/Dialect/CIR/IR/CIRDialect.h"
-#include "mlir/Dialect/StandardOps/IR/Ops.h"
+#include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/IR/Value.h"
 
 using namespace cir;
@@ -647,7 +647,7 @@ RValue CIRGenFunction::buildCall(clang::QualType CalleeType,
   assert(!CGM.getLangOpts().HIP && "HIP NYI");
 
   assert(!MustTailCall && "Must tail NYI");
-  mlir::CallOp callOP = nullptr;
+  mlir::func::CallOp callOP = nullptr;
   RValue Call = buildCall(FnInfo, Callee, ReturnValue, Args, &callOP,
                           E == MustTailCall, E->getExprLoc());
 

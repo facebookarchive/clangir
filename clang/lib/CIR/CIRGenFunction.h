@@ -33,8 +33,10 @@ class Expr;
 } // namespace clang
 
 namespace mlir {
+namespace func {
 class CallOp;
 }
+} // namespace mlir
 
 namespace {
 class ScalarExprEmitter;
@@ -522,7 +524,7 @@ public:
   /// LLVM arguments and the types they were derived from.
   RValue buildCall(const CIRGenFunctionInfo &CallInfo,
                    const CIRGenCallee &Callee, ReturnValueSlot ReturnValue,
-                   const CallArgList &Args, mlir::CallOp *callOrInvoke,
+                   const CallArgList &Args, mlir::func::CallOp *callOrInvoke,
                    bool IsMustTail, clang::SourceLocation Loc);
   RValue buildCall(clang::QualType FnType, const CIRGenCallee &Callee,
                    const clang::CallExpr *E, ReturnValueSlot returnValue,

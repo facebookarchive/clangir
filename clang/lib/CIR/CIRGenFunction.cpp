@@ -19,7 +19,7 @@
 #include "clang/Basic/TargetInfo.h"
 
 #include "mlir/Dialect/CIR/IR/CIRDialect.h"
-#include "mlir/Dialect/StandardOps/IR/Ops.h"
+#include "mlir/Dialect/Func/IR/FuncOps.h"
 
 using namespace cir;
 using namespace clang;
@@ -593,7 +593,7 @@ void CIRGenFunction::buildCXXConstructorCall(
   const CIRGenFunctionInfo &Info = CGM.getTypes().arrangeCXXConstructorCall(
       Args, D, Type, ExtraArgs.Prefix, ExtraArgs.Suffix, PassPrototypeArgs);
   CIRGenCallee Callee = CIRGenCallee::forDirect(CalleePtr, GlobalDecl(D, Type));
-  mlir::CallOp C;
+  mlir::func::CallOp C;
   buildCall(Info, Callee, ReturnValueSlot(), Args, &C, false, Loc);
 
   assert(CGM.getCodeGenOpts().OptimizationLevel == 0 ||

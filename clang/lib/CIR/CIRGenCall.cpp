@@ -20,7 +20,7 @@
 #include "clang/AST/GlobalDecl.h"
 
 #include "mlir/Dialect/CIR/IR/CIRTypes.h"
-#include "mlir/Dialect/StandardOps/IR/Ops.h"
+#include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/IR/Builders.h"
 #include "mlir/IR/BuiltinOps.h"
 #include "mlir/IR/BuiltinTypes.h"
@@ -260,8 +260,8 @@ RValue CIRGenFunction::buildCall(const CIRGenFunctionInfo &CallInfo,
                                  const CIRGenCallee &Callee,
                                  ReturnValueSlot ReturnValue,
                                  const CallArgList &CallArgs,
-                                 mlir::CallOp *callOrInvoke, bool IsMustTail,
-                                 SourceLocation Loc) {
+                                 mlir::func::CallOp *callOrInvoke,
+                                 bool IsMustTail, SourceLocation Loc) {
   // FIXME: We no longer need the types from CallArgs; lift up and simplify
 
   assert(Callee.isOrdinary() || Callee.isVirtual());
@@ -396,8 +396,8 @@ RValue CIRGenFunction::buildCall(const CIRGenFunctionInfo &CallInfo,
 
   // Emit the actual call op.
   auto callLoc = CGM.getLoc(Loc);
-  auto theCall =
-      CGM.getBuilder().create<mlir::CallOp>(callLoc, CalleePtr, CIRCallArgs);
+  auto theCall = CGM.getBuilder().create<mlir::func::CallOp>(callLoc, CalleePtr,
+                                                             CIRCallArgs);
 
   if (callOrInvoke)
     callOrInvoke = &theCall;
