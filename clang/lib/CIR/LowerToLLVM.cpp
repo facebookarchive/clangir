@@ -19,10 +19,10 @@
 #include "mlir/Conversion/StandardToLLVM/ConvertStandardToLLVMPass.h"
 #include "mlir/Dialect/Affine/IR/AffineOps.h"
 #include "mlir/Dialect/CIR/IR/CIRDialect.h"
+#include "mlir/Dialect/Func/IR/FuncOps.h"
 #include "mlir/Dialect/LLVMIR/LLVMDialect.h"
 #include "mlir/Dialect/MemRef/IR/MemRef.h"
 #include "mlir/Dialect/SCF/SCF.h"
-#include "mlir/Dialect/StandardOps/IR/Ops.h"
 #include "mlir/Pass/Pass.h"
 #include "mlir/Pass/PassManager.h"
 #include "mlir/Target/LLVMIR/Dialect/LLVMIR/LLVMToLLVMIRTranslation.h"
@@ -40,7 +40,7 @@ struct CIRToLLVMIRLoweringPass
     : public mlir::PassWrapper<CIRToLLVMIRLoweringPass,
                                mlir::OperationPass<mlir::ModuleOp>> {
   void getDependentDialects(mlir::DialectRegistry &registry) const override {
-    registry.insert<mlir::LLVM::LLVMDialect, mlir::StandardOpsDialect,
+    registry.insert<mlir::LLVM::LLVMDialect, mlir::func::FuncDialect,
                     mlir::scf::SCFDialect>();
   }
   void runOnOperation() final;
@@ -56,7 +56,7 @@ public:
                   mlir::PatternRewriter &rewriter) const override {
     assert(op.getNumOperands() == 0 &&
            "we aren't handling non-zero operand count returns yet");
-    rewriter.replaceOpWithNewOp<mlir::ReturnOp>(op);
+    rewriter.replaceOpWithNewOp<mlir::func::ReturnOp>(op);
     return mlir::LogicalResult::success();
   }
 };
