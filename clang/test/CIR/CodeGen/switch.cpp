@@ -1,19 +1,6 @@
 // RUN: %clang_cc1 -std=c++17 -triple x86_64-unknown-linux-gnu -fenable-clangir -emit-cir %s -o %t.cir
 // RUN: FileCheck --input-file=%t.cir %s
 
-void sw0(int a) {
-  switch (a) {}
-}
-
-// CHECK: func @_Z3sw0i
-// CHECK-NEXT:   %0 = cir.alloca i32, cir.ptr <i32>
-// CHECK-NEXT:   cir.store %arg0, %0 : i32, cir.ptr <i32>
-// CHECK-NEXT:   cir.scope {
-// CHECK-NEXT:     %1 = cir.load %0 : cir.ptr <i32>, i32
-// CHECK-NEXT:   }
-// CHECK-NEXT:   cir.return
-// CHECK-NEXT: }
-
 void sw1(int a) {
   switch (int b = 1; a) {
   case 0:
